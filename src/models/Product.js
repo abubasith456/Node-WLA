@@ -4,9 +4,10 @@ const productSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     price: { type: Number, required: true },
-    category: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true }, // Reference to Category
+    category: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true },
     stock: { type: Number, default: 0 },
-    images: [{ type: String }], // Array of image URLs
+    images: [{ type: Buffer }],
+    offerId: { type: mongoose.Schema.Types.ObjectId, ref: "Offer", default: null },
     createdAt: { type: Date, default: Date.now }
 });
 
