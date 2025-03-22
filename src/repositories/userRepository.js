@@ -15,7 +15,7 @@ export const findUserById = async (userId) => {
 };
 
 export const updateUserById = async (userId, updateData) => {
-    return await User.findByIdAndUpdate(userId, updateData);
+    return await User.findByIdAndUpdate(userId, updateData, { new: true });
 };
 
 export const addUserAddress = async (userId, address) => {
