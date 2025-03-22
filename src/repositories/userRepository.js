@@ -1,7 +1,8 @@
 import User from "../models/User.js";
 
 export const findUserByEmailOrMobile = async (email, mobile) => {
-    return await User.findOne({ $or: [{ email }, { mobile }] });
+    // return await User.findOne({ $or: [{ email }, { mobile }] });
+    return await User.findOne({ $or: [{ email }] });
 };
 
 export const createUser = async (userData) => {
