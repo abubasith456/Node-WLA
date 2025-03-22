@@ -9,7 +9,7 @@ export const createUser = async (userData) => {
 };
 
 export const findUserById = async (userId) => {
-    return await User.findById(userId);
+    return await User.findById(userId).select("-password");
 };
 
 export const updateUserById = async (userId, updateData) => {

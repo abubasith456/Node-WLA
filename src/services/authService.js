@@ -38,5 +38,5 @@ export const addUserAddress = async (userId, address) => {
 };
 
 export const getUserById = async (userId) => {
-    return await userRepository.findUserById(userId).select("-password"); // Don't return password
+    return await userRepository.findUserById(userId); // Don't return password
 };

@@ -29,7 +29,7 @@ router.post("/login", async (req, res) => {
 });
 
 // User Management
-router.get("/user/:userId", async (req, res) => {
+router.get("/:userId", async (req, res) => {
     try {
         const user = await authService.getUserById(req.params.userId);
         if (!user) return ResponseUtil.error(res, "User not found", 404);
@@ -39,7 +39,7 @@ router.get("/user/:userId", async (req, res) => {
     }
 });
 
-router.put("/user/:userId", async (req, res) => {
+router.put("/:userId", async (req, res) => {
     try {
         const updatedUser = await authService.updateUserInfo(req.params.userId, req.body);
         if (!updatedUser) return ResponseUtil.error(res, "User not found", 404);
@@ -49,7 +49,7 @@ router.put("/user/:userId", async (req, res) => {
     }
 });
 
-router.post("/user/:userId/addresses", async (req, res) => {
+router.post("/:userId/addresses", async (req, res) => {
     try {
         const updatedUser = await authService.addUserAddress(req.params.userId, req.body.address);
         if (!updatedUser) return ResponseUtil.error(res, "User not found", 404);

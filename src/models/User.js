@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, unique: true, sparse: true },
     mobile: { type: String, unique: true, sparse: true },
     dob: { type: Date, required: true },
+    images: [{ type: Buffer }],
     password: { type: String, required: true },
     googleId: { type: String, unique: true, sparse: true },
     addresses: [addressSchema]  // Added addresses as an array
