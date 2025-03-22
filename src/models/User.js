@@ -11,7 +11,8 @@ const addressSchema = new mongoose.Schema({
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, unique: true, sparse: true },
-    mobile: { type: String, unique: true, sparse: true },
+    // mobile: { type: String, unique: true, sparse: true },
+    mobile: { type: String },
     dob: { type: Date, required: true },
     images: [{ type: Buffer }],
     password: { type: String, required: true },
