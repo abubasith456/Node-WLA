@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import mongoose from "mongoose";
 
 export const findUserByEmailOrMobile = async (email, mobile) => {
     // return await User.findOne({ $or: [{ email }, { mobile }] });
@@ -14,7 +15,7 @@ export const findUserById = async (userId) => {
 };
 
 export const updateUserById = async (userId, updateData) => {
-    return await User.findByIdAndUpdate(userId, updateData, { new: true });
+    return await User.findByIdAndUpdate(userId, updateData);
 };
 
 export const addUserAddress = async (userId, address) => {

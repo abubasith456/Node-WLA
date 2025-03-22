@@ -41,9 +41,9 @@ router.get("/:userId", async (req, res) => {
 
 router.put("/:userId", async (req, res) => {
     try {
-        const updatedUser = await authService.updateUserInfo(req.params.userId, req.body);
-        if (!updatedUser) return ResponseUtil.error(res, "User not found", 404);
-        ResponseUtil.success(res, "User updated successfully", { updatedUser });
+        const user = await authService.updateUserInfo(req.params.userId, req.body);
+        if (!user) return ResponseUtil.error(res, "User not found", 404);
+        ResponseUtil.success(res, "User updated successfully", { user });
     } catch (error) {
         ResponseUtil.error(res, error.message, 400);
     }
@@ -51,9 +51,9 @@ router.put("/:userId", async (req, res) => {
 
 router.post("/:userId/addresses", async (req, res) => {
     try {
-        const updatedUser = await authService.addUserAddress(req.params.userId, req.body.address);
-        if (!updatedUser) return ResponseUtil.error(res, "User not found", 404);
-        ResponseUtil.success(res, "Address added successfully", { updatedUser });
+        const user = await authService.addUserAddress(req.params.userId, req.body.address);
+        if (!user) return ResponseUtil.error(res, "User not found", 404);
+        ResponseUtil.success(res, "Address added successfully", { user });
     } catch (error) {
         ResponseUtil.error(res, error.message, 400);
     }
