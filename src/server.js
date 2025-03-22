@@ -8,9 +8,11 @@ import morgan from "morgan";
 import authRouter from "./router/authRouter.js";
 import categoryRoutes from "./router/categoryRoutes.js";
 import productRoutes from "./router/productsRouter.js";
+import bannerRoutes from "./router/bannnerRouter.js"
+import offersRoutes from "./router/offerRoutes.js"
 
 dotenv.config();
-const BASE_API_PATH = "/api/v1"; 
+const BASE_API_PATH = "/api/v1";
 
 const app = express();
 
@@ -27,6 +29,8 @@ setupMiddleware();
 app.use(`${BASE_API_PATH}/user`, authRouter);
 app.use(`${BASE_API_PATH}/categories`, categoryRoutes);
 app.use(`${BASE_API_PATH}/products`, productRoutes);
+app.use(`${BASE_API_PATH}/banners`, bannerRoutes);
+app.use(`${BASE_API_PATH}/offers`, offersRoutes);
 
 // MongoDB Connection
 const connectDB = async () => {
