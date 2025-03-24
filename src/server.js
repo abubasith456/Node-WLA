@@ -10,6 +10,8 @@ import categoryRoutes from "./router/categoryRoutes.js";
 import productRoutes from "./router/productsRouter.js";
 import bannerRoutes from "./router/bannnerRouter.js"
 import offersRoutes from "./router/offerRoutes.js"
+import { swaggerUi, swaggerSpec } from './swagger.js';
+
 
 dotenv.config();
 const BASE_API_PATH = "/api/v1";
@@ -31,6 +33,8 @@ app.use(`${BASE_API_PATH}/categories`, categoryRoutes);
 app.use(`${BASE_API_PATH}/products`, productRoutes);
 app.use(`${BASE_API_PATH}/banners`, bannerRoutes);
 app.use(`${BASE_API_PATH}/offers`, offersRoutes);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // MongoDB Connection
 const connectDB = async () => {
