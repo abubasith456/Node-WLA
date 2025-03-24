@@ -16,6 +16,9 @@ const options = {
       {
         url: SERVER_URL, // Replace with your server URL
       },
+      {
+        url: "https://abubasith86-musfi-prod.hf.space/api/v1", // Replace with your server URL
+      },
     ],
   },
   apis: ["./src/router/*.js"], // Path to your route files
