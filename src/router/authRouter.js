@@ -13,7 +13,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/v1/user/signup:
+ * /user/signup:
  *   post:
  *     summary: Register a new user
  *     tags: [Auth]
@@ -50,7 +50,7 @@ router.post("/signup", async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/login:
+ * /user/login:
  *   post:
  *     summary: User login
  *     tags: [Auth]
@@ -89,7 +89,7 @@ router.post("/login", async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/{userId}:
+ * /user/{userId}:
  *   get:
  *     summary: Get user details
  *     tags: [Auth]
@@ -118,7 +118,7 @@ router.get("/:userId", async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/{userId}:
+ * /user/{userId}:
  *   put:
  *     summary: Update user details
  *     tags: [Auth]
@@ -160,7 +160,7 @@ router.put("/:userId", async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/user/{userId}/addresses:
+ * /user/{userId}/addresses:
  *   post:
  *     summary: Add a new address for the user
  *     tags: [Auth]

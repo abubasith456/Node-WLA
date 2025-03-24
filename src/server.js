@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
 import morgan from "morgan";
+import basicAuth from 'express-basic-auth';
 
 import authRouter from "./router/authRouter.js";
 import categoryRoutes from "./router/categoryRoutes.js";
@@ -34,7 +35,17 @@ app.use(`${BASE_API_PATH}/products`, productRoutes);
 app.use(`${BASE_API_PATH}/banners`, bannerRoutes);
 app.use(`${BASE_API_PATH}/offers`, offersRoutes);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(
+    "/api-docs",
+    basicAuth({
+        users: { [process.env.SWAGGER_USERNAME]: process.env.SWAGGER_PASSWORD }, // Change credentials here
+        challenge: true, // Forces browser login prompt
+        unauthorizedResponse: "Unauthorized Access", // Custom message
+    }),
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec)
+);
+
 
 // MongoDB Connection
 const connectDB = async () => {

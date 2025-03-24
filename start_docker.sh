@@ -15,8 +15,8 @@ else
 fi
 
 # Restart Docker container
-echo "🚀 Restarting $SERVICE_NAME..."
-docker-compose -f $DOCKER_COMPOSE_FILE down
-docker-compose -f $DOCKER_COMPOSE_FILE up -d $SERVICE_NAME
+# echo "🚀 Restarting $SERVICE_NAME..."
+# docker-compose -f $DOCKER_COMPOSE_FILE down
+# docker-compose -f $DOCKER_COMPOSE_FILE up -d $SERVICE_NAME
 
-echo "✅ $SERVICE_NAME started successfully!"
+# echo "✅ $SERVICE_NAME started successfully!"
