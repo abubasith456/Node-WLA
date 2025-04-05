@@ -11,6 +11,7 @@ import categoryRoutes from "./router/categoryRoutes.js";
 import productRoutes from "./router/productsRouter.js";
 import bannerRoutes from "./router/bannnerRouter.js"
 import offersRoutes from "./router/offerRoutes.js"
+import orderRoutes from "./router/orderRouter.js";
 import { swaggerUi, swaggerSpec } from './swagger.js';
 
 
@@ -34,6 +35,7 @@ app.use(`${BASE_API_PATH}/categories`, categoryRoutes);
 app.use(`${BASE_API_PATH}/products`, productRoutes);
 app.use(`${BASE_API_PATH}/banners`, bannerRoutes);
 app.use(`${BASE_API_PATH}/offers`, offersRoutes);
+app.use(`${BASE_API_PATH}/orders`, orderRoutes);
 
 app.use(
     "/api-docs",

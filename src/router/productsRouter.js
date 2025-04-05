@@ -50,6 +50,11 @@ const upload = multer({ storage: storage });
  *         required: true
  *         description: Product category
  *       - in: formData
+ *         name: sizes
+ *         type: string
+ *         required: false
+ *         description: 'Array of sizes in JSON format (Example: `[{"size":"S","stock":10},{"size":"M","stock":15}]`)'
+ *       - in: formData
  *         name: stock
  *         type: number
  *         required: true
@@ -67,13 +72,16 @@ const upload = multer({ storage: storage });
  */
 router.post("/", upload.array("images"), asyncHandler(async (req, res) => {
     try {
-        const { name, description, price, category, stock, offerId } = req.body;
+        const { name, description, price, category, stock, offerId, sizes } = req.body;
+
+        // Convert sizes from string (if sent as JSON in form-data)
+        const parsedSizes = sizes ? JSON.parse(sizes) : [];
 
         // Convert uploaded images to Base64
         const compressedImages = await Promise.all(
             req.files.map(async (file) => {
                 const webpBuffer = await sharp(file.buffer)
-                    .webp({ quality: 80 }) // Compress to WebP format
+                    .webp({ quality: 80 })
                     .toBuffer();
                 return webpBuffer;
             })
@@ -84,7 +92,8 @@ router.post("/", upload.array("images"), asyncHandler(async (req, res) => {
             description,
             price,
             category,
-            stock,
+            stock: parsedSizes.length > 0 ? 0 : stock, // If sizes exist, ignore stock field
+            sizes: parsedSizes,
             images: compressedImages,
             offerId
         });
