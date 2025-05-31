@@ -1,25 +1,17 @@
 import admin from 'firebase-admin';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import fs from 'fs';
+import dotenv from 'dotenv';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const serviceAccount = path.join(__dirname, '../../config/flutter-hayat.json');
-
-// Verify service account file exists
-if (!fs.existsSync(serviceAccount)) {
-    throw new Error('Firebase service account file not found');
-}
+dotenv.config();
 
 try {
-    // Check if app is already initialized
     if (!admin.apps.length) {
         admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount),
-            storageBucket: "flutter-hayat.appspot.com" // Remove 'gs://' prefix
+            credential: admin.credential.cert({
+                projectId: process.env.FIREBASE_PROJECT_ID,
+                clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+                privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+            }),
+            storageBucket: process.env.FIREBASE_STORAGE_BUCKET
         });
         console.log('Firebase Admin initialized successfully');
     }
