@@ -6,7 +6,7 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const serviceAccount = path.join(__dirname, '../../config/firebase-admin-sdk.json');
+const serviceAccount = path.join(__dirname, '../../config/data.json');
 
 // Initialize Firebase Admin
 admin.initializeApp({
