@@ -14,16 +14,6 @@ const uploadMiddleware = multer({
     storage: storage,
     limits: {
         fileSize: 5 * 1024 * 1024, // 5MB limit
-    },
-    fileFilter: (req, file, cb) => {
-        const filetypes = /jpeg|jpg|png/;
-        const mimetype = filetypes.test(file.mimetype);
-        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-
-        if (mimetype && extname) {
-            return cb(null, true);
-        }
-        cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
     }
 });
 
@@ -174,10 +164,13 @@ router.get("/:userId", validateObjectId, async (req, res) => {
  */
 router.put("/:userId", validateObjectId, uploadMiddleware.single('profilePic'), async (req, res, next) => {
     try {
+        // Add logging to debug file upload
+        console.log('File received:', req.file);
+
         const updateData = { ...req.body };
 
         if (req.file) {
-            const filename = `profiles/${req.params.userId}-${Date.now()}-${req.file.originalname}`;
+            const filename = `profiles/${req.params.userId}-${Date.now()}${path.extname(req.file.originalname)}`;
             const downloadURL = await uploadToFirebase(req.file, filename);
             updateData.profilePic = downloadURL;
         }
@@ -186,6 +179,10 @@ router.put("/:userId", validateObjectId, uploadMiddleware.single('profilePic'), 
         if (!user) return ResponseUtil.error(res, "User not found", 404);
         ResponseUtil.success(res, "User updated successfully", { user });
     } catch (error) {
+        console.error('Profile update error:', error);
+        if (error.message.includes('Only .png, .jpg and .jpeg format allowed')) {
+            return ResponseUtil.error(res, error.message, 400);
+        }
         next(error);
     }
 });
