@@ -80,7 +80,7 @@ process.on("SIGINT", async () => {
 });
 
 // Start Server
-const PORT = process.env.PORT || 5000;
+const PORT = 6000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
