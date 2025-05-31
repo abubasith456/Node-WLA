@@ -9,8 +9,7 @@ export const createOrder = async (orderData) => {
 // Get all orders with user and product details
 export const getAllOrders = async () => {
     return await Order.find({})
-        .populate("userId", "name email")
-        .populate("items.product", "name price images")
+        .select("-password")
         .sort({ createdAt: -1 })
         .exec();
 };

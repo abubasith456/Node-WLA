@@ -1,8 +1,31 @@
 import express from "express";
+import multer from "multer";
+import path from "path";
 import * as authService from "../services/authService.js";
 import ResponseUtil from "../utils/ResponseUtil.js"; // Import the response utility
+import { uploadToFirebase } from "../utils/firebaseStorage.js";
+import { validateObjectId } from "../utils/validateObjectId.js";
 
 const router = express.Router();
+
+// Configure multer for file upload with size limits
+const storage = multer.memoryStorage();
+const uploadMiddleware = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png/;
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+        cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+    }
+});
 
 /**
  * @swagger
@@ -106,7 +129,7 @@ router.post("/login", async (req, res) => {
  *       404:
  *         description: User not found
  */
-router.get("/:userId", async (req, res) => {
+router.get("/:userId", validateObjectId, async (req, res) => {
     try {
         const user = await authService.getUserById(req.params.userId);
         if (!user) return ResponseUtil.error(res, "User not found", 404);
@@ -122,6 +145,8 @@ router.get("/:userId", async (req, res) => {
  *   put:
  *     summary: Update user details
  *     tags: [Auth]
+ *     consumes:
+ *       - multipart/form-data
  *     parameters:
  *       - in: path
  *         name: userId
@@ -129,32 +154,39 @@ router.get("/:userId", async (req, res) => {
  *         schema:
  *           type: string
  *         description: ID of the user
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: John Doe Updated
- *               email:
- *                 type: string
- *                 example: updated@example.com
+ *       - in: formData
+ *         name: profilePic
+ *         type: file
+ *         description: Profile picture file
+ *       - in: formData
+ *         name: name
+ *         type: string
+ *         description: User's name
+ *       - in: formData
+ *         name: email
+ *         type: string
+ *         description: User's email
  *     responses:
  *       200:
  *         description: User updated successfully
  *       404:
  *         description: User not found
  */
-router.put("/:userId", async (req, res) => {
+router.put("/:userId", validateObjectId, uploadMiddleware.single('profilePic'), async (req, res, next) => {
     try {
-        const user = await authService.updateUserInfo(req.params.userId, req.body);
+        const updateData = { ...req.body };
+
+        if (req.file) {
+            const filename = `profiles/${req.params.userId}-${Date.now()}-${req.file.originalname}`;
+            const downloadURL = await uploadToFirebase(req.file, filename);
+            updateData.profilePic = downloadURL;
+        }
+
+        const user = await authService.updateUserInfo(req.params.userId, updateData);
         if (!user) return ResponseUtil.error(res, "User not found", 404);
         ResponseUtil.success(res, "User updated successfully", { user });
     } catch (error) {
-        ResponseUtil.error(res, error.message, 400);
+        next(error);
     }
 });
 
@@ -187,7 +219,7 @@ router.put("/:userId", async (req, res) => {
  *       404:
  *         description: User not found
  */
-router.post("/:userId/addresses", async (req, res) => {
+router.post("/:userId/addresses", validateObjectId, async (req, res) => {
     try {
         const user = await authService.addUserAddress(req.params.userId, req.body.address);
         if (!user) return ResponseUtil.error(res, "User not found", 404);

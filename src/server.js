@@ -13,7 +13,7 @@ import bannerRoutes from "./router/bannnerRouter.js"
 import offersRoutes from "./router/offerRoutes.js"
 import orderRoutes from "./router/orderRouter.js";
 import { swaggerUi, swaggerSpec } from './swagger.js';
-
+import { errorHandler } from '../utils/errorHandler.js';
 
 dotenv.config();
 const BASE_API_PATH = "/api/v1";
@@ -67,6 +67,9 @@ app.use((err, req, res, next) => {
     console.error("🔥 Internal Server Error:", err.message);
     res.status(500).json({ status: "error", message: "Something went wrong!" });
 });
+
+// Add error handler after all routes
+app.use(errorHandler);
 
 // Graceful Shutdown
 process.on("SIGINT", async () => {
