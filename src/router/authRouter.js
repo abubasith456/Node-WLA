@@ -226,4 +226,38 @@ router.post("/:userId/addresses", validateObjectId, async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /user/update-fcm-token:
+ *   post:
+ *     summary: Update user's FCM token
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               fcmToken:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: FCM token updated successfully
+ *       400:
+ *         description: Bad request
+ */
+router.post("/update-fcm-token", async (req, res) => {
+    try {
+        const { userId, fcmToken } = req.body;
+        const user = await authService.updateUserInfo(userId, { fcmToken });
+        if (!user) return ResponseUtil.error(res, "User not found", 404);
+        ResponseUtil.success(res, "FCM token updated successfully");
+    } catch (error) {
+        ResponseUtil.error(res, error.message, 400);
+    }
+});
+
 export default router;

@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     googleId: { type: String, unique: true, sparse: true },
     profilePic: { type: String }, // URL from Firebase Storage
+    fcmToken: { type: String }, // Add this field for push notifications
     addresses: [addressSchema]
 }, { timestamps: true });
 
